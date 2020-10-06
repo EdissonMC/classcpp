@@ -38,7 +38,7 @@ void CharStack::clear() {
 
 
 void CharStack::push(char ch) {
-    std::cout <<"\nadding a value..\n";
+   // std::cout <<"\nadding a value..\n";
     elements.push_back(ch);
 }
 
@@ -64,7 +64,7 @@ char CharStack::peek() {
     if(isEmpty()) {
         std::cout << "Error Attempting to pop an empty stack";
     }
-
-    return elements[elements.size() - 1];
+    char result = elements.back();
+    return result;
 
 }

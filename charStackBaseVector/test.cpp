@@ -13,7 +13,10 @@ int main() {
 
     std::cout <<"the size of charstack : " <<  myCharStack.size() << "\n"; 
 
-    
+
+    std::cout << "\nshowing the last element in the myCharStack with peek: " <<  myCharStack.peek() << "\n"; 
+    std::cout << "check that after call peek function, the last element was no delete \n\n";
+
     for ( ; !myCharStack.isEmpty(); ) {
 
         char tmp = myCharStack.pop();
