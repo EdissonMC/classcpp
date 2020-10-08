@@ -9,12 +9,11 @@
     for the CharStack class, which can simply forward the request on to the underlying structure.
     The methods are short enough to require no detailed documentation
 
-    
 */
+
+
 #include <iostream>
-
 #include "charstack.h"
-
 
 /*
     Implementation notes: constructor and destructor
@@ -30,6 +29,35 @@ CharStack::CharStack() {
     array = new char[capacity];
     count = 0;
 }
+
+
+/*
+    Implementatio notes: copy constructor and assignment operator
+    _____________________________________________________________
+
+    These methods make it possible to pass a CharStack by value or 
+    assign one CharStack to another. The actual work is done by the 
+    private deepCopy method, which represents a useful pattern 
+    for designing other classes that need to implement deep copying
+
+*/
+CharStack::CharStack(const CharStack & src) {
+
+    deepCopy(src);
+
+}
+
+
+CharStack & CharStack::operator=(const CharStack & src) {
+
+    if (this != &src) {
+        delete [] array;
+        deepCopy (src);
+    }
+
+    return *this;
+}
+
 
 
 /*
@@ -122,15 +150,12 @@ char CharStack::peek() {
     it runs out of space. To do so, it must the pointer to the old array,
     allocate a new array with twice the capacity, copy the characters from the old array
     to the new one, and finally free the old storage.
-
 */
-
 void CharStack::expandCapacity() {
 
     char *oldArray = array;
     capacity *=2;
     array =  new char[capacity];  // Allocate double of the old capacity in the heap memory
-
 
     // Refill the new array in the new allocated space
     for (int i = 0; i< count; i++) {
@@ -138,4 +163,32 @@ void CharStack::expandCapacity() {
     }
 
     delete[] oldArray;  // Deleted the old memory allocated for the Array
+}
+
+
+
+
+/*
+
+    Implementation notes: deepCopy
+    ______________________________
+    Copies the data from the src parameter into the current object
+    All dynamic memory is reallocated to create a "deep copy" in
+    wich the current object and source object are independent
+
+*/
+void CharStack::deepCopy(const CharStack & src) {
+
+    // CREATE A NEW ARRAY
+    array = new char[src.count];
+
+    // COPY THE OLD ARRAY INTO THE NEW ARRAY
+    for (int i = 0;  i < src.count; i++) {
+        array[i] = src.array[i];
+    }
+
+    // COPY THE OTHERS VARIABLES
+    count = src.count;
+    capacity = src.capacity;
+
 }

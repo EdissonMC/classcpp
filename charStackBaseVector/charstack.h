@@ -5,16 +5,15 @@
     This interface defines the charStack class, which implements the
     stack abastraction for characters.
 
-    This version of the CharStack class uses a Vector<char> as its
-    underlying representation. Characters are always added and 
-    removerd from the end, which gives rise to the last-in/fist-out
-    bechavior that is characteristic of stacks
 
 */
 
 #ifndef _charstack_h
 #define _charstack_h
 #include <vector>
+
+
+
 
 /*
 
@@ -93,8 +92,6 @@ class CharStack
         void push(char value);
 
 
-
-
         /*
             Method: pop
             Usage: char top = cstk.pop()
@@ -103,8 +100,6 @@ class CharStack
 
         */
        char pop();
-
-
 
 
 
@@ -125,6 +120,8 @@ class CharStack
     private:
         
         std::vector<char> elements; /* Data structure to hold the stack elemements */
+
+        
 };
 
 

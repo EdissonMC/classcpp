@@ -2,12 +2,16 @@
 
     File: charstack.cpp
     ___________________
-    This file implements the CharStack class using a Vector<char>
-    as the unerlying representation. 
+    This version of the CharStack class uses a Vector<char> as its
+    underlying representation. Characters are always added and 
+    removerd from the end, which gives rise to the last-in/fist-out
+    bechavior that is characteristic of stacks
+
     The Vector class already implements most of the essential operations
     for the CharStack class, which can simply forward the request on to the underlying structure.
     The methods are short enough to require no detailed documentation
 
+    
 */
 
 #include "charstack.h"
@@ -41,6 +45,7 @@ void CharStack::push(char ch) {
    // std::cout <<"\nadding a value..\n";
     elements.push_back(ch);
 }
+
 
 
 

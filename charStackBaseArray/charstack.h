@@ -117,6 +117,7 @@ class CharStack
        */
         char peek() ;
 
+        void deepCopy(const CharStack & src);
 
 
     private:
@@ -125,13 +126,14 @@ class CharStack
             static const int INITIAL_CAPACITY = 10;
 
         /* Instance variables */
-            char *array;          /* Dynamic array of characters   */
+            char *array;           /* Dynamic array of characters   */
             int  capacity;         /* Allocated size of that array  */
             int  count;            /* Current count of chars pushed */
 
         
         /* Private function prototype */
             void expandCapacity();
+
 
 
 };  
