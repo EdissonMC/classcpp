@@ -24,5 +24,10 @@ int main() {
     
     }
 
+
+    /* CREATING OTHE charStack VARIABLE TO TEST THE COPYCOSTRUCTOR */
+    
+    CharStack otherCharStack(myCharStack) ;
+
     return 0;
 }

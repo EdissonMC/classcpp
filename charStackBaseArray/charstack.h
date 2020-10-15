@@ -39,7 +39,7 @@ class CharStack
             Initializes a new empty stack that can contain characters
         */
         CharStack(/* args */);
-
+        CharStack(const CharStack & src);
 
 
 
@@ -119,6 +119,8 @@ class CharStack
 
         void deepCopy(const CharStack & src);
 
+
+        CharStack & operator=(const CharStack & src);
 
     private:
         
