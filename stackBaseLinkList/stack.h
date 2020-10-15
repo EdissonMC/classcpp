@@ -107,17 +107,20 @@ class stack
 
     private:
         
-        /* data */    
-        struct Cell {
-            ValueType data;      /* The data value        */
-            Cell *link;          /* Link to the next cell */
-        }
+        /*  data  */    
+            struct Cell {
+                ValueType data;      /* The data value        */
+                Cell *link;          /* Link to the next cell */
+            };
 
-        /* Instance variables */
-            Cell *list;   /* Initial pointer in the list */
-            int count;    /* Number of elements          */
-        /* Private method prototypes */
-        void deepCopy (const stack<ValueType> & src);
+
+        /*  Instance variables */
+            Cell *list;            /* Initial pointer in the list */
+            int size_elements;     /* Number of elements          */
+
+            
+        /*  Private method prototypes */
+            void deepCopy (const stack<ValueType> & src);
 
 
 
@@ -138,24 +141,27 @@ class stack
 
 
 /*
-    Implementation notes: Stack constructor
+    Implementation notes: Stack CONSTRUCTOR
     _______________________________________
-    The constructor must allocate the array storage for the stack elements
-    and initialize the fields of the object
-
+    The constructor mus create an empty linked list and initialize the size_element counter
 */
     template <typename ValueType>
     stack<ValueType>::stack() 
     { 
-        capacity = INITIAL_CAPACITY;
-        array = new ValueType[capacity];
-        size_elements=0;
+        std::cout <<"\n -CRANDO UN OBJETO TIPO stack - \n";
+        size_elements = 0; 
+        list = NULL;
     }
 
 
 
+
+
+
+
+
 /*
-    Implementation notes: copy constructor and assignment operator
+    Implementation notes: COPY CONSTRUCTOR and ASSIGNMENT OPERATOR 
     ______________________________________________________________
     These methods follow the standard template, leaving the work to deepCopy.
 */
@@ -168,10 +174,12 @@ class stack
     template <typename ValueType>
     stack<ValueType>&  stack<ValueType>::operator=(const stack<ValueType> & src) 
     { 
-        if(this != &src) {
-            delete [] array;
-            deepCopy(src);
-        }
+         std::cout <<"\n ESTOY EN operator=  ";
+         if(this != &src) {
+             clear();
+             deepCopy(src);
+         }
+
         return *this;
     }
 
@@ -183,14 +191,21 @@ class stack
 /*
     Implementation notes: ~stack
     ____________________________
-    The destructor frees any heap memory allocated by the class, 
-    wich is just the dynamic array of elements.
+    The destructor frees any heap memory that is allocated by the 
+    implementation . Because clear frees each element it processes,
+    this implementation of the destructor simply calls that method.
+
 */
     template <typename ValueType>
     stack<ValueType>::~stack() { 
-        delete [] array;
+        clear();
     }
 
+/*
+    Implementation notes :size, isEmpty
+    ___________________________________
+    These methods use the count variable and therefore run in constant time.
+*/
 
     template <typename ValueType>
     int stack<ValueType>::size() const{
@@ -202,10 +217,16 @@ class stack
         return size_elements == 0;
     }
 
-    
+/*
+    Implementation notes: clear
+    __________________________
+    This method pops the stack until it is empty, thereby freeing each cell.
+*/
     template <typename ValueType>
     void stack<ValueType>::clear()  {
-         size_elements = 0;
+        while(size_elements >0 ) {
+            pop();
+        }
     }
 
 
@@ -213,20 +234,32 @@ class stack
 
 
 /*
-    Implementation notes : push
+    Implementation notes : PUSH
     ___________________________
-    This function must first check to see whether there is enough room for the value
-    and expand the array storage if necessary.
+    This method chains a new element onto the front ot the list
+    where it becomes the top of the stack.
 */
     template <typename ValueType>
     void stack<ValueType>::push(ValueType value) {
         
-        if(isEmpty()){
-            expandCapacity();
-        }
+        //  CREATE A NEW CELL
+            Cell *newCell = new Cell;
 
-        array[size_elements] = value;
+            std::cout <<"\n\nposicion en memoria de newCell : " << &newCell ;
+            std::cout <<"\n\nvalor de newCell : " << newCell <<"\n";
+
+        //  ASSIGNS A NEW VALUE A CELL
+            newCell->data = value;
+            newCell->link = list;
+            
+        //  POINT list TO THE newCeLL
+        list = newCell; 
+
+        std::cout<< "valor de list: " << list;
+
+
         size_elements++;
+
     }
 
 
@@ -242,32 +275,35 @@ class stack
     template <typename ValueType>
     ValueType stack<ValueType>::pop() {
         
-        
-        if(isEmpty()) {
-            size_elements = 0;
-            std::cout << " - error Stack Empty- \n\n";
-            return -1;
+        if(isEmpty) {
+            error ("pop: attempting to pop an empty stack")
         }
+        Cell *cp= list;
+
+        ValueType result = list->data;
+
+        list = list->link;
+
+        // delete tmp;
 
         size_elements--;
-        return array[size_elements];
+        return  result;
 
     }
 
 
     template <typename ValueType>
     ValueType stack<ValueType>::peek() {
-        
-        if(isEmpty()) {
-            size_elements = 0;
-            std::cout << " - error Stack Empty- \n\n";
-            return -1;
+          
+        if(isEmpty) {
+            error ("pop: attempting to pop an empty stack")
         }
 
-        int top = size_elements - 1 ;
-        return array[top];
-
+       
+        return  list->data;
     }
+
+
 
 
 
@@ -278,61 +314,44 @@ class stack
 /*
     Implementation notes: deepCopy
     ______________________________
-    Copies the data from the src parameter into the current object.
-    All dynamic memory is reallocated to create a "deep copy"  
-    in which the current object and the source object are independent.
-    The capacity is set so the stack has some room to expand. 
+    The deepCopy method creates a copy of the cells in the linked list.
+    The variable tail keep track of the last cell in the chain.
+
 */
     template <typename ValueType>
     void stack<ValueType>::deepCopy (const stack<ValueType> & src){
 
-    capacity = src.size_elements + INITIAL_CAPACITY;
-
-        this->array = new ValueType[capacity];
-
-
-        for (int i=0; i< src.size_elements ; i++ ) {
-            array[i] = src.array[i];
-        }
-
-
-        size_elements=  src.size_elements;
         
-    }
+        size_elements = src.size_elements;
 
+        Cell *tail = NULL;
 
+        for(Cell *cp = src.list;  cp!=NULL; cp = cp->link ) {
 
+            Cell *ncp = new Cell;
 
-/*
-    Implementation notes: expandCapacity
-    ____________________________________
-    This private method doubles the capacity of the elements array whenever
-    it runs out of space. To do so, it must copy the pointer to the old
-    array, allocate a new array with twice the capacity,  copy the values
-    from the old array to the new one, and finally free the old storage
-*/
+            ncp->data= cp->data;
 
-    template <typename ValueType>
-    void  stack<ValueType>::expandCapacity() {
-
-        //  Create a new array for save the currentArray
-            ValueType* oldArray = array;
-
-        //  Duplicate the capacity for get more room for news values
-            capacity = capacity*2;
-
-        //  Allocate heap memory for new array.
-            array =  new ValueType[capacity];
-
-        //  Copy all the elements
-            for (int i=0; i< size_elements ; i++ ) {
-                array[i] = oldArray[i];
+            if(tail ==NULL) {
+                list= ncp;
+            }else{
+                tail->link = ncp;
             }
 
-        //  Deallocate heap memory for the oldArray
-            delete [] oldArray;
+            tail= ncp;
+        }
+
+        if(tail != NULL) tail->link = NULL;
+
         
-        std::cout<<"- The new  CAPACITY ARRAY  is :" << capacity <<"\n";
     }
+
+
+
+
+
+
+
+
 
 #endif
