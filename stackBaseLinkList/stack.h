@@ -2,6 +2,12 @@
     File: stack.h
     _____________
     This interface exports a template version of the stack
+    This version of the stack.h interface uses a linked list to store
+    the elements of the stack. 
+    The top item is always at the front of the linked list and 
+    is therefore always accessible without searching.
+    The private data also keeps track of the number of elements so that
+    the size method runs in constant time.
 
 */
 
@@ -100,16 +106,19 @@ class stack
 
 
     private:
-        static const int INITIAL_CAPACITY = 10;
         
         /* data */    
-        ValueType * array;   /* A dynamic array of the elements */
-        int capacity;        /* The allocated size of the array */
-        int size_elements ;  /* The number of stack elements    */
-        
+        struct Cell {
+            ValueType data;      /* The data value        */
+            Cell *link;          /* Link to the next cell */
+        }
+
+        /* Instance variables */
+            Cell *list;   /* Initial pointer in the list */
+            int count;    /* Number of elements          */
         /* Private method prototypes */
         void deepCopy (const stack<ValueType> & src);
-        void expandCapacity();
+
 
 
 };
