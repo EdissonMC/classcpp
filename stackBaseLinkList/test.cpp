@@ -18,11 +18,20 @@ int main() {
     std::cout <<"\n\nADDING # 32:";
     myStack.push(32);
 
-    stack<int> newStack;
-    newStack = myStack;
 
-    std::cout <<"\nSHOWING newStack: after copy myStack into newStack using operator= \n\n";
-   
+    
+
+    std::cout <<"\n SHOWING newStack: after copy myStack into newStack using operator= \n\n";
+    // Way 1
+    // In this case we pass the oldStack  through (=) operator to newStack,
+    // but when this happen to the initialize this convert in the way of the
+    // newStack(myStack).
+    stack<int> newStack = myStack;
+    
+
+    // Way2
+    // stack<int> newStack = myStack;
+    // newStack = myStack;
 
     int dato=0;
     int original_size =newStack.size();

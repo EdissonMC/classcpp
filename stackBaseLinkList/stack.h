@@ -168,13 +168,16 @@ class stack
     template <typename ValueType>
     stack<ValueType>::stack(const stack<ValueType> & src) 
     { 
+        std::cout << "\n > ESTOY EN  stack(const stack<ValueType> & src)  \n";
+
         deepCopy(src);
     }
 
     template <typename ValueType>
     stack<ValueType>&  stack<ValueType>::operator=(const stack<ValueType> & src) 
     { 
-         std::cout <<"\n ESTOY EN operator=  ";
+         std::cout << "\n > ESTOY EN operator=  ";
+
          if(this != &src) {
              clear();
              deepCopy(src);
@@ -253,7 +256,7 @@ class stack
             newCell->link = list;
             
         //  POINT list TO THE newCeLL
-        list = newCell; 
+            list = newCell; 
 
         std::cout<< "valor de list: " << list;
 
@@ -275,8 +278,8 @@ class stack
     template <typename ValueType>
     ValueType stack<ValueType>::pop() {
         
-        if(isEmpty) {
-            error ("pop: attempting to pop an empty stack")
+        if(isEmpty()) {
+            std::cout<< "pop: attempting to pop an empty stack";
         }
         Cell *cp= list;
 
@@ -284,7 +287,7 @@ class stack
 
         list = list->link;
 
-        // delete tmp;
+        delete cp;
 
         size_elements--;
         return  result;
@@ -295,8 +298,8 @@ class stack
     template <typename ValueType>
     ValueType stack<ValueType>::peek() {
           
-        if(isEmpty) {
-            error ("pop: attempting to pop an empty stack")
+        if(isEmpty()) {
+             std::cout<< "pop: attempting to pop an empty stack";
         }
 
        
@@ -320,6 +323,8 @@ class stack
 */
     template <typename ValueType>
     void stack<ValueType>::deepCopy (const stack<ValueType> & src){
+
+         std::cout << "\n > ESTOY EN deepCopy()  \n";
 
         
         size_elements = src.size_elements;
